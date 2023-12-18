@@ -1,4 +1,4 @@
-package com.revival.inventory.book.entities;
+package com.revival.inventory.cart.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,16 +11,17 @@ import lombok.NoArgsConstructor;
 import java.math.BigInteger;
 
 @Entity
-@Table(name = "_book")
+@Table(name = "_cart")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class Book {
+public class CartItem {
 
     @Id
     @GeneratedValue
     private BigInteger id;
-    private String title;
-    private BigInteger price;
-    private String imagePath;
+    private BigInteger userId;
+    private BigInteger bookId;
+    private BigInteger quantity;
+
 }
