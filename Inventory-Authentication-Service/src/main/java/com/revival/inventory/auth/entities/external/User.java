@@ -1,51 +1,33 @@
-package com.revival.inventory.user.entities;
+package com.revival.inventory.auth.entities.external;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.math.BigInteger;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 
-@Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "_user")
 @JsonIgnoreProperties({"enabled", "username", "authorities", "credentialsNonExpired", "accountNonExpired", "accountNonLocked"})
 public class User implements UserDetails {
 
-    @Id
-    @GeneratedValue
     private BigInteger id;
-
     private String firstName;
-
     private String lastName;
-
     private String password;
-
     private String email;
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return Collections.emptyList();
     }
 
     @Override
@@ -78,3 +60,4 @@ public class User implements UserDetails {
         return true;
     }
 }
+

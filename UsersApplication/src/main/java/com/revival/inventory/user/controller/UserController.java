@@ -43,6 +43,18 @@ public class UserController {
                 .body(user.orElse(null));
     }
 
+    @GetMapping("/{email}")
+    private ResponseEntity<User> getUserByEmail(@PathVariable String email) {
+        var user = userService.getUser(email);
+        HttpStatus statusCode = HttpStatus.OK;
+        if (user == null) {
+            statusCode = HttpStatus.NOT_FOUND;
+        }
+        return ResponseEntity
+                .status(statusCode)
+                .body(user);
+    }
+
     @GetMapping
     private ResponseEntity<List<User>> getUsers() {
         return ResponseEntity

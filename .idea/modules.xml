@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ApiGateway.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ApiGateway.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Book Inventory - MicroServices.iml" filepath="$PROJECT_DIR$/.idea/Book Inventory - MicroServices.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Inventory-Book-Application.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Inventory-Book-Application.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Inventory-Cart-Application.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Inventory-Cart-Application.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/UsersApplication.main.iml" filepath="$PROJECT_DIR$/.idea/modules/UsersApplication.main.iml" />
     </modules>
   </component>

@@ -7,6 +7,7 @@ import com.revival.inventory.user.repository.UserRepository;
 import com.revival.inventory.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User createUser(User requestUser) {
@@ -27,7 +29,7 @@ public class UserServiceImpl implements UserService {
                 .firstName(requestUser.getFirstName())
                 .lastName(requestUser.getLastName())
                 .email(requestUser.getEmail())
-                .password(requestUser.getPassword())
+                .password(passwordEncoder.encode(requestUser.getPassword()))
                 .role(Role.USER)
                 .build();
         return userRepository.save(user);
@@ -41,6 +43,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> getUser(BigInteger userId) {
         return userRepository.findById(userId);
+    }
+
+    @Override
+    public User getUser(String email) {
+        return userRepository.findByEmail(email);
     }
 
 }
