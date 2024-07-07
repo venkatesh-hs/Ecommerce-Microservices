@@ -1,6 +1,5 @@
 package com.revival.inventory.user.controller;
 
-
 import com.revival.inventory.user.entities.User;
 import com.revival.inventory.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +42,7 @@ public class UserController {
                 .body(user.orElse(null));
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/email/{email}")
     private ResponseEntity<User> getUserByEmail(@PathVariable String email) {
         var user = userService.getUser(email);
         HttpStatus statusCode = HttpStatus.OK;

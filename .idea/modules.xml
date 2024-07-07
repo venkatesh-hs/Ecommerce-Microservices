@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ApiGateway.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ApiGateway.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Book Inventory - MicroServices.iml" filepath="$PROJECT_DIR$/.idea/Book Inventory - MicroServices.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Inventory-Authentication-Service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Inventory-Authentication-Service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Inventory-Book-Application.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Inventory-Book-Application.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Inventory-Cart-Application.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Inventory-Cart-Application.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/UsersApplication.main.iml" filepath="$PROJECT_DIR$/.idea/modules/UsersApplication.main.iml" />

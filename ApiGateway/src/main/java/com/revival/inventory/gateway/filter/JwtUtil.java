@@ -1,28 +1,27 @@
-package com.revival.inventory.auth.service.impl;
+package com.revival.inventory.gateway.filter;
 
-import com.revival.inventory.auth.entities.external.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Map;
 import java.util.function.Function;
 
-@Service
-@AllArgsConstructor
-public class JwtService {
-    private static final String SECRET_KEY = "5a5c499df9c21c0e26e9b40c6e6106d327123c9645751bfa4c2ae2c18adbe61e0cf4eaae210238fe53c9e0e494937da429fb04d91d2b914e9f904418435c1b79";
+@Component
+@RequiredArgsConstructor
+public class JwtUtil {
 
-    public boolean isTokenValid(String jwt, User userDetails) {
+    private static final String SECRET_KEY = "5a5c499df9c21c0e26e9b40c6e6106d327123c9645751bfa4c2ae2c18adbe61e0cf4eaae210238fe53c9e0e494937da429fb04d91d2b914e9f904418435c1b79";
+    //private final UserServiceClient userServiceClient;
+
+    public boolean isTokenValid(String jwt) {
         String userName = extractUserEmail(jwt);
-        return userName.equals(userDetails.getEmail()) && isTokenExpired(jwt);
+        //String email = userServiceClient.getUserByEmail(userName).getEmail();
+        return isTokenExpired(jwt);
     }
 
     private boolean isTokenExpired(String token) {
@@ -52,20 +51,4 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-
-    public String generateToken(Map<String, Object> claims, User user) {
-        return Jwts
-                .builder()
-                .addClaims(claims)
-                .setSubject(user.getEmail())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 2))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
-                .compact();
-    }
-
-    public String generateToken(User user) {
-        return generateToken(Collections.emptyMap(), user);
-    }
-
 }

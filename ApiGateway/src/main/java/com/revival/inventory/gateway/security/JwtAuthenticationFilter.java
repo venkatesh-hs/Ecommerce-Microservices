@@ -1,50 +1,49 @@
 package com.revival.inventory.gateway.security;
 
-import com.revival.inventory.gateway.service.JwtAuthServiceClient;
-import jakarta.annotation.Nonnull;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import com.revival.inventory.gateway.filter.JwtUtil;
+import com.revival.inventory.gateway.filter.RouteValidator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.gateway.filter.GatewayFilter;
+import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
-
-import java.io.IOException;
 
 @Component
-@RequiredArgsConstructor
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAuthenticationFilter.Config> {
 
-    private final JwtAuthServiceClient jwtAuthServiceClient;
-    private final UserDetailsService userDetailsService;
+    @Autowired
+    public RouteValidator validator;
+
+    @Autowired
+    public JwtUtil jwtUtil;
+
+    public JwtAuthenticationFilter() {
+        super(Config.class);
+    }
 
     @Override
-    protected void doFilterInternal(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response, @Nonnull FilterChain filterChain) throws ServletException, IOException {
-        final String authHeader = request.getHeader("Authorization");
-        final String jwt;
-        final String userEmail;
+    public GatewayFilter apply(Config config) {
+        return ((exchange, chain) -> {
+            if (validator.isSecured.test(exchange.getRequest())) {
+                if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
+                    throw new RuntimeException("missing authorization header");
+                }
 
-        if (authHeader == null || !authHeader.startsWith("bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        jwt = authHeader.substring(7);
-        userEmail = jwtAuthServiceClient.extractUserEmail(jwt);
-        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-            if (jwtAuthServiceClient.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                String authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
+                if (authHeader != null && authHeader.startsWith("bearer ")) {
+                    authHeader = authHeader.substring(7);
+                }
+                boolean valid = jwtUtil.isTokenValid(authHeader);
+                if (!valid) {
+                    System.out.println("invalid access...!");
+                    throw new RuntimeException("unauthorized access to application");
+                }
             }
-        }
-        filterChain.doFilter(request, response);
+            return chain.filter(exchange);
+        });
+    }
+
+    public static class Config {
+        //config
     }
 }

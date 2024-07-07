@@ -11,9 +11,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
+/*import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetails;*/
 
 import java.math.BigInteger;
 import java.util.Collection;
@@ -25,8 +25,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "_user")
-@JsonIgnoreProperties({"enabled", "username", "authorities", "credentialsNonExpired", "accountNonExpired", "accountNonLocked"})
-public class User implements UserDetails {
+//@JsonIgnoreProperties({"enabled", "username", "authorities", "credentialsNonExpired", "accountNonExpired", "accountNonLocked"})
+public class User {
 
     @Id
     @GeneratedValue
@@ -43,7 +43,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Override
+    /*@Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
@@ -76,5 +76,5 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
+    }*/
 }
