@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigInteger;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/v1/cart")
 public class CartController {
 
