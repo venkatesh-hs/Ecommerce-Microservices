@@ -23,4 +23,6 @@ public class Book {
     private String title;
     private BigInteger price;
     private String imagePath;
+    private String author;
+    private String category;
 }

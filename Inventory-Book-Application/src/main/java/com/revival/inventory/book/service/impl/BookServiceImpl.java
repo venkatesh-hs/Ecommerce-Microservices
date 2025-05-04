@@ -3,7 +3,8 @@ package com.revival.inventory.book.service.impl;
 import com.revival.inventory.book.entities.Book;
 import com.revival.inventory.book.repository.BookRepository;
 import com.revival.inventory.book.service.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.revival.inventory.book.utils.Utils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -11,10 +12,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
-    @Autowired
-    public BookRepository bookRepository;
+    private final BookRepository bookRepository;
+    private final Utils utils;
 
     @Override
     public Book createBook(Book book) {
@@ -22,8 +24,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> getBooks() {
-        return bookRepository.findAll();
+    public List<Book> getBooks(List<String> titles, List<String> authors, List<String> categories, Integer minPrice, Integer maxPrice) {
+        return bookRepository.getBooks(
+                utils.getCommaSeparatedString(titles),
+                utils.getCommaSeparatedString(authors),
+                utils.getCommaSeparatedString(categories),
+                minPrice,
+                maxPrice
+        );
     }
 
     @Override

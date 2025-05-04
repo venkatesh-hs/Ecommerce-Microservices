@@ -2,24 +2,20 @@ package com.revival.inventory.book.controller;
 
 import com.revival.inventory.book.entities.Book;
 import com.revival.inventory.book.service.BookService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/books")
+@RequiredArgsConstructor
 public class BookController {
 
-    @Autowired
-    private BookService bookService;
+    private final BookService bookService;
 
     @PostMapping
     private ResponseEntity<Book> createBook(@RequestBody Book book) {
@@ -43,9 +39,13 @@ public class BookController {
     }
 
     @GetMapping
-    private ResponseEntity<List<Book>> getBooks() {
+    private ResponseEntity<List<Book>> getBooks(@RequestParam(value = "name", required = false) List<String> titles,
+                                                @RequestParam(value = "author", required = false) List<String> authors,
+                                                @RequestParam(value = "category", required = false) List<String> categories,
+                                                @RequestParam(value = "minPrice", required = false) Integer minPrice,
+                                                @RequestParam(value = "maxPrice", required = false) Integer maxPrice) {
         return ResponseEntity
                 .ok()
-                .body(bookService.getBooks());
+                .body(bookService.getBooks(titles, authors, categories, minPrice, maxPrice));
     }
 }
